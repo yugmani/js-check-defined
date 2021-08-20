@@ -55,3 +55,63 @@ if (typeof buzz === 'undefined') {
 
 const fuzz = 100;
 console.log(typeof fuzz === 'undefined'); // false
+
+// Using try/catch
+
+// When accessing a not defined variable, JavaScript throws a reference error
+
+// So… what about wrapping the checked variable in a try block, and try to catch the reference error? If the error is caught, that would mean that the variable is not defined
+
+// let myVar;
+// myVar = 500;
+
+try {
+  myVar;
+  console.log('myVar is defined');
+} catch (e) {
+  e;
+  console.log(e);
+  console.log('myVar is not defined');
+}
+
+// Output:
+// ReferenceError {}
+// myVar is not defined
+
+// Note: uncomment line 66 and 67 and see the output.
+
+// Compared to typeof approach, the try/catch is more precise because it determines solely if the variable is not defined, despite being initialized or uninitialized.
+
+// Using window.hasOwnProperty()
+
+// Each global variable is stored as a property on the global object (window in a browser environment, global in NodeJS).
+// You can use this idea to determine if the global variable myGlobalVar is defined: simply check the global object for corresponding property existence: window.hasOwnProperty('myGlobalVar').
+
+// For example, here’s how to check if the browser defines an IntersectionObserver variable:
+
+if (window.hasOwnProperty('IntersectionObserver')) {
+  console.log('The browser provides IntersectionObserver');
+} else {
+  console.log("The browser doesn't support IntersectionObserver");
+}
+
+// var variables and function declarations, when used in the outermost scope (aka global scope), do create properties on the global object:
+var sum = 111;
+function sayHello() {
+  return 'Hello!';
+}
+
+var isSum = window.hasOwnProperty(sum);
+console.log(isSum); // true? false
+
+console.log(window.hasOwnProperty('sayHello')); // true ? false (stackblitz result)
+
+// However, be aware that const and let variables, as well as class declarations, do not create properties on the global object:
+const temp = 23;
+let greet = 'Hello!';
+
+class NewClass {}
+
+console.log(window.hasOwnProperty('temp')); // false
+console.log(window.hasOwnProperty('greet')); // false
+console.log(window.hasOwnProperty('NewClass')); // false
